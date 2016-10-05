@@ -8,6 +8,7 @@
 
 #include "DataBase.hpp"
 #include <iostream>
+#include "String.hpp"
 
 void DataBase::join()
 {
@@ -17,20 +18,21 @@ void DataBase::insert_into()
 {
     char dataToBeInserted[ROW_SIZE];
     char partialData[ROW_SIZE];
-    const char select[7] = "SELECT";
-    const char insert[7] = "INSERT";
+    
+    String select = String(SELECT_QUERY_NAME);
+    String insert = String(INSERT_QUERY_NAME);
     const char columnsStart[2] = "(";
     
     printf("Please, enter you SQL request:\n");
     scanf("%[^\n]s", dataToBeInserted);
     printf(dataToBeInserted);
-    strncpy(partialData, dataToBeInserted, 6);
+    String queryName = String(dataToBeInserted).substring(0, 6);
     
-    if (strcmp(select, partialData) == 0) {
+    if (queryName == select) {
         printf("it is select\n");
     }
     
-    if (strcmp(insert, partialData) == 0) {
+    if (queryName == insert) {
         printf("it is insert\n");
     }
     

@@ -27,7 +27,7 @@ void Table::select()
     for (int i=0; i<length_; ++i){
         for (int j=0; j< ROW_SIZE; ++j) {
             if (data[i][j] == *p) {
-                std::cout << "" << std::endl;;
+                std::cout << "" << std::endl;
             } else {
                 std::cout << data[i][j];
             }

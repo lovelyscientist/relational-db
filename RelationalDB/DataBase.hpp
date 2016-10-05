@@ -8,7 +8,9 @@
 
 #ifndef DataBase_hpp
 #define DataBase_hpp
-#define MAX_TABLES_COUNT = 100;
+#define MAX_TABLES_COUNT 100
+#define INSERT_QUERY_NAME "INSERT"
+#define SELECT_QUERY_NAME "SELECT"
 
 #include <stdio.h>
 #include "Table.hpp"
@@ -23,6 +25,7 @@ public:
     void join();
     void select_from();
     int tables_count;
+    Table tables[];
 };
 
 #endif /* DataBase_hpp */
