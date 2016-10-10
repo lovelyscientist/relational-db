@@ -10,7 +10,7 @@
 #include "DataBase.hpp"
 
 int main(int argc, const char * argv[]) {
-    Table *myNewTable = new Table(10);
+    Table *myNewTable = new Table(10, "id,name,surname,adress");
     DataBase *myNewDb = new DataBase();
     
     char dataToAdd[] = "index=3&name=Tanya&surname=Petrova";

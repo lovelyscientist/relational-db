@@ -17,13 +17,10 @@ class String {
     
 public:
     char *cString;
-    
     bool operator ==(const String &rhs);
-    
+    int getLength(const char *);
+    void print();
     String (const char *);
-    
     String substring(int from, int to);
-    
     ~String();
-    
 };

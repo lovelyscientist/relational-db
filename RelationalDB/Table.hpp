@@ -12,13 +12,15 @@
 #define MAX_TABLE_NAME_SIZE 100
 #include <stdio.h>
 #include <iostream>
-
+#include "String.hpp"
 #endif /* Table_hpp */
 
 class Table
 {
 public:
-    explicit Table(int length){
+    explicit Table(int length, String columns) :columns(columns){
+        this->columns = columns;
+        this->columns.print();
         data = new char * [length]; // could be entered during runtime
         data[0] = new char[ROW_SIZE];
         data[1]= new char[ROW_SIZE];
@@ -26,12 +28,12 @@ public:
         strcpy(data[1], "index=2&name=Sergii&surname=Sergiev");
         length_ = 2;
     }
-    Table() {};
     char** data;
     void insert(char [], int);
     void join();
     void select();
     char name[MAX_TABLE_NAME_SIZE];
+    String columns;
 private:
     int length_;
 };

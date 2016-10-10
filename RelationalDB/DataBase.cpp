@@ -8,7 +8,6 @@
 
 #include "DataBase.hpp"
 #include <iostream>
-#include "String.hpp"
 
 void DataBase::join()
 {
@@ -17,15 +16,13 @@ void DataBase::join()
 void DataBase::insert_into()
 {
     char dataToBeInserted[ROW_SIZE];
-    char partialData[ROW_SIZE];
     
     String select = String(SELECT_QUERY_NAME);
     String insert = String(INSERT_QUERY_NAME);
-    const char columnsStart[2] = "(";
     
     printf("Please, enter you SQL request:\n");
     scanf("%[^\n]s", dataToBeInserted);
-    printf(dataToBeInserted);
+
     String queryName = String(dataToBeInserted).substring(0, 6);
     
     if (queryName == select) {

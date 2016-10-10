@@ -25,7 +25,7 @@ public:
     void join();
     void select_from();
     int tables_count;
-    Table tables[];
+    //Table tables[];
 };
 
 #endif /* DataBase_hpp */

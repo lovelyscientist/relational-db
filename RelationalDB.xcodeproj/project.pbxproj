@@ -11,6 +11,7 @@
 		689C8EDC1DA50A3F006E2483 /* DataBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 689C8EDA1DA50A3F006E2483 /* DataBase.cpp */; };
 		A98F34AE1D9A6E5000141BFC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98F34AD1D9A6E5000141BFC /* main.cpp */; };
 		A98F34B61DA0F1FD00141BFC /* Table.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98F34B41DA0F1FD00141BFC /* Table.cpp */; };
+		A98F34BC1DAB8E0200141BFC /* Row.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A98F34BA1DAB8E0200141BFC /* Row.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,6 +35,8 @@
 		A98F34AD1D9A6E5000141BFC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		A98F34B41DA0F1FD00141BFC /* Table.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Table.cpp; sourceTree = "<group>"; };
 		A98F34B51DA0F1FD00141BFC /* Table.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Table.hpp; sourceTree = "<group>"; };
+		A98F34BA1DAB8E0200141BFC /* Row.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Row.cpp; sourceTree = "<group>"; };
+		A98F34BB1DAB8E0200141BFC /* Row.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Row.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 			children = (
 				689C8ED41DA509F0006E2483 /* String.cpp */,
 				689C8ED51DA509F0006E2483 /* String.hpp */,
+				A98F34BA1DAB8E0200141BFC /* Row.cpp */,
+				A98F34BB1DAB8E0200141BFC /* Row.hpp */,
 				689C8EDA1DA50A3F006E2483 /* DataBase.cpp */,
 				689C8EDB1DA50A3F006E2483 /* DataBase.hpp */,
 				A98F34AD1D9A6E5000141BFC /* main.cpp */,
@@ -134,6 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A98F34B61DA0F1FD00141BFC /* Table.cpp in Sources */,
+				A98F34BC1DAB8E0200141BFC /* Row.cpp in Sources */,
 				689C8ED61DA509F0006E2483 /* String.cpp in Sources */,
 				689C8EDC1DA50A3F006E2483 /* DataBase.cpp in Sources */,
 				A98F34AE1D9A6E5000141BFC /* main.cpp in Sources */,
