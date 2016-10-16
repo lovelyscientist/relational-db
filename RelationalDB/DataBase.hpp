@@ -21,9 +21,9 @@ class DataBase
 public:
     DataBase(){};
     void start_operation();
-    void insert_into();
+    void insert_into(std::string);
     void join();
-    void select_from();
+    void select_from(std::string);
     void create_table(std::string);
     int tables_count = 0;
     std::string* split_to_array(std::string, char);

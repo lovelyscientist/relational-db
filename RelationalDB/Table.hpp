@@ -23,6 +23,7 @@ public:
     void insert(std::string []);
     void join();
     void select();
+    int data_length = 0;
     std::string name;
     std::string** data;
     std::string* columns;

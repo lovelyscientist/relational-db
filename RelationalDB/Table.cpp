@@ -23,6 +23,8 @@ Table::Table(std::string columns_[], std::string name) {
     data[0] = new std::string[3] {"Alexey", "Ivanov", "23"};
     data[1] = new std::string[3] {"Artem", "Ivanov", "20"};
     data[2] = new std::string[3] {"Ivan", "Ivanov", "33"};
+    
+    this->data_length = 3;
 }
 void Table::join()
 {
@@ -30,6 +32,8 @@ void Table::join()
 }
 void Table::insert(std::string row[])
 {
+    this->data[this->data_length] = row;
+    this->data_length++;
     
 }
 void Table::select()
@@ -40,8 +44,8 @@ void Table::select()
     
     std::cout << "\n---------------" << std::endl;
     
-    for (int i = 0; i < 3; ++i ){
-        for (int j = 0; j < 3; ++j ){
+    for (int i = 0; i < this->data_length; ++i ){
+        for (int j = 0; this->columns[j].length(); ++j ){
             std::cout << this->data[i][j] + " ";
         }
         std::cout << "" << std::endl;

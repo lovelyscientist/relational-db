@@ -18,7 +18,6 @@ void DataBase::start_operation()
     bool isValidOperation = false;
     
     printf("Please, enter you SQL request:\n");
-    //std::getline (std::cin, dataToBeInserted);
     
     while (std::getline (std::cin, dataToBeInserted)) {
         shortQueryName = dataToBeInserted.substr(0, 6);
@@ -27,12 +26,12 @@ void DataBase::start_operation()
         
         if (shortQueryName == SELECT_QUERY_NAME) {
             isValidOperation = true;
-            this->select_from();
+            //this->select_from("sasha");
         }
         
         if (shortQueryName == INSERT_QUERY_NAME) {
             isValidOperation = true;
-            this->insert_into();
+            this->insert_into(dataToBeInserted);
         }
         
         if (longQueryName == CREATE_TABLE_QUERY_NAME) {
@@ -49,13 +48,13 @@ void DataBase::start_operation()
 void DataBase::create_table(std::string inputData)
 {
     std::string columns = "";
-    std::size_t positionOf1, positionOf2, positionOfSpace;
+    std::size_t positionOfBegin, positionOfEnd, positionOfSpace;
     
-    positionOf1 = inputData.find('(');
-    positionOf2 = inputData.find(';');
+    positionOfBegin = inputData.find('(');
+    positionOfEnd = inputData.find(';');
     positionOfSpace = inputData.find(' ', 13);
     
-    columns = inputData.substr(positionOf1 + 1, positionOf2-positionOf1-2);
+    columns = inputData.substr(positionOfBegin + 1, positionOfEnd-positionOfBegin-2);
     this->tables[this->tables_count] = Table(this->split_to_array(columns, ','), inputData.substr(13, positionOfSpace - 12));
     std::cout << "successful creation of " + this->tables[this->tables_count].name << std::endl;
     this->tables_count++;
@@ -66,12 +65,34 @@ void DataBase::join()
     std::cout << "successful join" << std::endl;
 }
 
-void DataBase::insert_into()
+void DataBase::insert_into(std::string inputData)
 {
+    std::string values = "";
+    std::string name = "";
+    std::size_t positionOf1, positionOf2, positionOfSpace;
+    
+    positionOf1 = inputData.find('(');
+    positionOf2 = inputData.find(';');
+    positionOfSpace = inputData.find(' ', 12);
+    
+    values = inputData.substr(positionOf1 + 1, positionOf2-positionOf1-2);
+    name = inputData.substr(12, positionOfSpace - 11);
+    
+    for (unsigned int i = 0; i<this->tables_count; i++){
+        if (this->tables[i].name == name) {
+            this->tables[i].insert(this->split_to_array(values, ','));
+            this->tables[i].select();
+        }
+    }
+    
     std::cout << "successful insert" << std::endl;
 }
-void DataBase::select_from()
+void DataBase::select_from(std::string tableName)
 {
+    for (unsigned int i = 0; i<this->tables_count; i++){
+        if (this->tables[i].name == tableName) {
+            this->tables[i].select();        }
+    }
     std::cout << "successful select" << std::endl;
 }
 std::string* DataBase::split_to_array(std::string string, char delim) {
