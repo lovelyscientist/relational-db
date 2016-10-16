@@ -10,15 +10,15 @@
 #include "DataBase.hpp"
 
 int main(int argc, const char * argv[]) {
-    Table *myNewTable = new Table(10, "id,name,surname,adress");
-    DataBase *myNewDb = new DataBase();
+    std::string columns [500] = {"name", "surname", "age", ""};
+    Table* myNewTable = new Table(columns, "people");
+    DataBase* myNewDb = new DataBase();
     
-    char dataToAdd[] = "index=3&name=Tanya&surname=Petrova";
-    myNewTable->insert(dataToAdd, sizeof(dataToAdd)/sizeof(dataToAdd[0]));
+    std::string datatoAdd[] = {"skjfsdf", "sdjfhjksf", "sljdfhksdf"};
     
+    myNewTable->insert(datatoAdd);
     myNewTable->select();
+    myNewDb->start_operation();
     
-    myNewDb->insert_into();
-    // insert code here...
     return 0;
 }

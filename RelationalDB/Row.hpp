@@ -17,6 +17,5 @@
 class Row {
 public:
     Row(String);
-    ~Row();
-    String values[];
+    String values[200];
 };

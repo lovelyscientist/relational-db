@@ -12,28 +12,20 @@
 #define MAX_TABLE_NAME_SIZE 100
 #include <stdio.h>
 #include <iostream>
-#include "String.hpp"
+#include <string.h>
 #endif /* Table_hpp */
 
 class Table
 {
 public:
-    explicit Table(int length, String columns) :columns(columns){
-        this->columns = columns;
-        this->columns.print();
-        data = new char * [length]; // could be entered during runtime
-        data[0] = new char[ROW_SIZE];
-        data[1]= new char[ROW_SIZE];
-        strcpy(data[0], "index=1&name=Ivan&surname=Ivanov");
-        strcpy(data[1], "index=2&name=Sergii&surname=Sergiev");
-        length_ = 2;
-    }
-    char** data;
-    void insert(char [], int);
+    explicit Table(std::string [], std::string);
+    Table() {};
+    void insert(std::string []);
     void join();
     void select();
-    char name[MAX_TABLE_NAME_SIZE];
-    String columns;
+    std::string name;
+    std::string** data;
+    std::string* columns;
 private:
     int length_;
 };

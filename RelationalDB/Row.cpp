@@ -7,9 +7,5 @@
 //
 
 #include "Row.hpp"
-Row::Row(String values) :values(values){
-    this->values = values;
-}
-Row::~Row() {
-    //delete this->values;
-}
+//Row::Row(String values) :values(values){
+//}
