@@ -12,6 +12,7 @@
 #define INSERT_QUERY_NAME "INSERT"
 #define SELECT_QUERY_NAME "SELECT"
 #define CREATE_TABLE_QUERY_NAME "CREATE TABLE"
+#define INNER_JOIN_QUERY_NAME "INNER JOIN"
 
 #include <stdio.h>
 #include "Table.hpp"
@@ -22,7 +23,7 @@ public:
     DataBase(){};
     void start_operation();
     void insert_into(std::string);
-    void join();
+    void join(std::string);
     void select_from(std::string);
     void create_table(std::string);
     int tables_count = 0;

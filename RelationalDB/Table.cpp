@@ -16,9 +16,11 @@ Table::Table(std::string columns_[], std::string name) {
     this->name = name;
     
     
-    for (int length = 0; columns_[length].length(); length++) {
+    for (unsigned int length = 0; columns_[length].length(); length++) {
         this->columns[length] = columns_[length];
     }
+    
+    this->columns_length = length_- 1;
     
     data[0] = new std::string[3] {"Alexey", "Ivanov", "23"};
     data[1] = new std::string[3] {"Artem", "Ivanov", "20"};
@@ -33,19 +35,25 @@ void Table::join()
 void Table::insert(std::string row[])
 {
     this->data[this->data_length] = row;
-    this->data_length++;
     
+    //this->data[this->data_length] = new std::string [this->columns_length] ();
+    //for (unsigned int j = 0; this->columns_length; ++j ){
+      //  this->data[this->data_length][j] = row[j];
+        //std::cout << this->data[this->data_length][j] << std::endl;
+    //}
+    
+    this->data_length++;
 }
 void Table::select()
 {
-    for (int j = 0; this->columns[j].length(); ++j ){
+    for (unsigned int j = 0; this->columns[j].length(); ++j ){
         std::cout << this->columns[j] + " ";
     }
     
     std::cout << "\n---------------" << std::endl;
     
-    for (int i = 0; i < this->data_length; ++i ){
-        for (int j = 0; this->columns[j].length(); ++j ){
+    for (unsigned int i = 0; i < this->data_length; ++i ){
+        for (unsigned int j = 0; this->columns[j].length(); ++j ){
             std::cout << this->data[i][j] + " ";
         }
         std::cout << "" << std::endl;

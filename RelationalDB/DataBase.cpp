@@ -13,7 +13,8 @@ void DataBase::start_operation()
 {
     std::string dataToBeInserted,
                 shortQueryName,
-                longQueryName;
+                longQueryName,
+                middleQueryName;
     
     bool isValidOperation = false;
     
@@ -21,6 +22,7 @@ void DataBase::start_operation()
     
     while (std::getline (std::cin, dataToBeInserted)) {
         shortQueryName = dataToBeInserted.substr(0, 6);
+        middleQueryName = dataToBeInserted.substr(0, 10);
         longQueryName = dataToBeInserted.substr(0, 12);
         
         
@@ -37,6 +39,11 @@ void DataBase::start_operation()
         if (longQueryName == CREATE_TABLE_QUERY_NAME) {
             isValidOperation = true;
             this->create_table(dataToBeInserted);
+        }
+        
+        if (middleQueryName == INNER_JOIN_QUERY_NAME) {
+            isValidOperation = true;
+            this->join(dataToBeInserted);
         }
         
         if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
@@ -60,16 +67,55 @@ void DataBase::create_table(std::string inputData)
     this->tables_count++;
 }
 
-void DataBase::join()
+void DataBase::join(std::string inputData)
 {
-    std::cout << "successful join" << std::endl;
+    std::string table1 = "",
+                table2 = "",
+                column1 = "",
+                column2 = "";
+    
+    std::size_t tmpPosition,
+                positionOfSpace1,
+                positionOfSpace2,
+                positionOfSpace3,
+                firstColumnPosition,
+                secondColumnPosition;
+    
+    positionOfSpace1 = inputData.find(' ', 11);
+    positionOfSpace2 = inputData.find(' ', positionOfSpace1 + 4);
+    positionOfSpace3 = inputData.find("ON", positionOfSpace2 + 1);
+    
+    table1 = inputData.substr(11, positionOfSpace1 - 10);
+    table2 = inputData.substr(positionOfSpace2 + 1, positionOfSpace3 - positionOfSpace2 - 2);
+    
+    firstColumnPosition = inputData.find(table1 + ".", positionOfSpace3);
+    secondColumnPosition = inputData.find(table2 + ".", positionOfSpace3);
+    
+    
+    std::cout << firstColumnPosition << std::endl;
+    std::cout << secondColumnPosition << std::endl;
+
+    
+    tmpPosition = inputData.find(' ', firstColumnPosition);
+    //column1 = inputData.substr(firstColumnPosition, tmpPosition - firstColumnPosition);
+    
+    tmpPosition = inputData.find(';', secondColumnPosition);
+    //column2 = inputData.substr(secondColumnPosition, tmpPosition - secondColumnPosition);
+    
+    std::cout << table1 << std::endl;
+    std::cout << table2 << std::endl;
+    std::cout << column1 << std::endl;
+    std::cout << column2 << std::endl;
 }
 
 void DataBase::insert_into(std::string inputData)
 {
-    std::string values = "";
-    std::string name = "";
-    std::size_t positionOf1, positionOf2, positionOfSpace;
+    std::string values = "",
+                name = "";
+    
+    std::size_t positionOf1,
+                positionOf2,
+                positionOfSpace;
     
     positionOf1 = inputData.find('(');
     positionOf2 = inputData.find(';');
@@ -98,7 +144,7 @@ void DataBase::select_from(std::string tableName)
 std::string* DataBase::split_to_array(std::string string, char delim) {
     std::string arr[500];
     std::size_t spacePos, currPos = 0, prevPos = 0;;
-    int k = 0;
+    unsigned int k = 0;
     
     while (string.find(delim, currPos) != std::string::npos) {
         spacePos = string.find(delim,currPos);

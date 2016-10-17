@@ -23,7 +23,8 @@ public:
     void insert(std::string []);
     void join();
     void select();
-    int data_length = 0;
+    unsigned int data_length = 0;
+    unsigned int columns_length = 0;
     std::string name;
     std::string** data;
     std::string* columns;
