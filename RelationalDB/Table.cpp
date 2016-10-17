@@ -28,9 +28,14 @@ Table::Table(std::string columns_[], std::string name) {
     
     this->data_length = 3;
 }
-void Table::join()
-{
-    std::cout << "successful join" << std::endl;
+std::string Table::get_name() {
+    return this->name;
+}
+std::string* Table::get_columns() {
+    return this->columns;
+}
+std::string** Table::get_data() {
+    return this->data;
 }
 void Table::insert(std::string row[])
 {

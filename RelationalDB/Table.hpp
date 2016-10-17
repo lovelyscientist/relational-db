@@ -21,8 +21,11 @@ public:
     explicit Table(std::string [], std::string);
     Table() {};
     void insert(std::string []);
-    void join();
     void select();
+    std::string get_name();
+    std::string** get_data();
+    std::string* get_columns();
+private:
     unsigned int data_length = 0;
     unsigned int columns_length = 0;
     std::string name;

@@ -14,7 +14,8 @@ void DataBase::start_operation()
     std::string dataToBeInserted,
                 shortQueryName,
                 longQueryName,
-                middleQueryName;
+                middleQueryName,
+                longLongQueryName;
     
     bool isValidOperation = false;
     
@@ -24,6 +25,7 @@ void DataBase::start_operation()
         shortQueryName = dataToBeInserted.substr(0, 6);
         middleQueryName = dataToBeInserted.substr(0, 10);
         longQueryName = dataToBeInserted.substr(0, 12);
+        longLongQueryName = dataToBeInserted.substr(0, 13);
         
         
         if (shortQueryName == SELECT_QUERY_NAME) {
@@ -46,6 +48,11 @@ void DataBase::start_operation()
             this->join(dataToBeInserted);
         }
         
+        if (longLongQueryName == SELECT_QUERY_NAME) {
+            isValidOperation = true;
+            this->select_from(dataToBeInserted);
+        }
+        
         if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
         isValidOperation = false;
     }
@@ -63,49 +70,30 @@ void DataBase::create_table(std::string inputData)
     
     columns = inputData.substr(positionOfBegin + 1, positionOfEnd-positionOfBegin-2);
     this->tables[this->tables_count] = Table(this->split_to_array(columns, ','), inputData.substr(13, positionOfSpace - 12));
-    std::cout << "successful creation of " + this->tables[this->tables_count].name << std::endl;
+    std::cout << "successful creation of " + this->tables[this->tables_count].get_name() << std::endl;
     this->tables_count++;
 }
 
 void DataBase::join(std::string inputData)
 {
-    std::string table1 = "",
-                table2 = "",
-                column1 = "",
-                column2 = "";
+    Table tableObj;
+    std::string table1 = this->parse_join(inputData, "table1");
+    std::string table2 = this->parse_join(inputData, "table2");
+    std::string column1 = this->parse_join(inputData, "column1");
+    std::string column2 = this->parse_join(inputData, "column2");
     
-    std::size_t tmpPosition,
-                positionOfSpace1,
-                positionOfSpace2,
-                positionOfSpace3,
-                firstColumnPosition,
-                secondColumnPosition;
+    for (unsigned int i = 0; i<this->tables_count; i++){
+        if (this->tables[i].get_name() == table1) {
+            tableObj = this->tables[i];
+            break;
+        }
+    }
     
-    positionOfSpace1 = inputData.find(' ', 11);
-    positionOfSpace2 = inputData.find(' ', positionOfSpace1 + 4);
-    positionOfSpace3 = inputData.find("ON", positionOfSpace2 + 1);
-    
-    table1 = inputData.substr(11, positionOfSpace1 - 10);
-    table2 = inputData.substr(positionOfSpace2 + 1, positionOfSpace3 - positionOfSpace2 - 2);
-    
-    firstColumnPosition = inputData.find(table1 + ".", positionOfSpace3);
-    secondColumnPosition = inputData.find(table2 + ".", positionOfSpace3);
-    
-    
-    std::cout << firstColumnPosition << std::endl;
-    std::cout << secondColumnPosition << std::endl;
-
-    
-    tmpPosition = inputData.find(' ', firstColumnPosition);
-    //column1 = inputData.substr(firstColumnPosition, tmpPosition - firstColumnPosition);
-    
-    tmpPosition = inputData.find(';', secondColumnPosition);
-    //column2 = inputData.substr(secondColumnPosition, tmpPosition - secondColumnPosition);
-    
-    std::cout << table1 << std::endl;
-    std::cout << table2 << std::endl;
-    std::cout << column1 << std::endl;
-    std::cout << column2 << std::endl;
+    for (unsigned int i = 0; i<this->tables_count; i++){
+        if (this->tables[i].get_name() == table2) {
+            break;
+        }
+    }
 }
 
 void DataBase::insert_into(std::string inputData)
@@ -125,21 +113,30 @@ void DataBase::insert_into(std::string inputData)
     name = inputData.substr(12, positionOfSpace - 11);
     
     for (unsigned int i = 0; i<this->tables_count; i++){
-        if (this->tables[i].name == name) {
+        if (this->tables[i].get_name() == name) {
             this->tables[i].insert(this->split_to_array(values, ','));
+            std::cout << "successful insert" << std::endl;
             this->tables[i].select();
         }
     }
-    
-    std::cout << "successful insert" << std::endl;
 }
-void DataBase::select_from(std::string tableName)
+void DataBase::select_from(std::string inputData)
 {
+    std::string tableName = inputData.substr(14, inputData.length() - 15);
+    
     for (unsigned int i = 0; i<this->tables_count; i++){
-        if (this->tables[i].name == tableName) {
-            this->tables[i].select();        }
+         std::cout << tables[i].get_name()<< std::endl;
+         std::cout << tableName << std::endl;
+        
+        this->tables[i].select();
+        
+        if (this->tables[i].get_name() == tableName) {
+            std::cout << "*" << std::endl;
+            this->tables[i].select();
+            std::cout << "successful select from" + tableName << std::endl;
+            break;
+        }
     }
-    std::cout << "successful select" << std::endl;
 }
 std::string* DataBase::split_to_array(std::string string, char delim) {
     std::string arr[500];
@@ -159,6 +156,29 @@ std::string* DataBase::split_to_array(std::string string, char delim) {
     arr[k+1] = "";
 
     return &arr[0];
+}
+std::string DataBase:: parse_join(std::string inputData, std::string returnParametr){
+    std::string table1 = "",
+                table2 = "",
+                column1 = "name",
+                column2 = "name";
+    
+    std::size_t positionOfSpace1,
+                positionOfSpace2,
+                positionOfSpace3;
+    
+    positionOfSpace1 = inputData.find(' ', 11);
+    positionOfSpace2 = inputData.find(' ', positionOfSpace1 + 4);
+    positionOfSpace3 = inputData.find("ON", positionOfSpace2 + 1);
+    
+    table1 = inputData.substr(11, positionOfSpace1 - 10);
+    table2 = inputData.substr(positionOfSpace2 + 1, positionOfSpace3 - positionOfSpace2 - 2);
+    
+    if (returnParametr == "table1") return table1;
+    if (returnParametr == "table2") return table2;
+    if (returnParametr == "column1") return column1;
+    if (returnParametr == "column2") return column2;
+    else return "";
 }
 
 
