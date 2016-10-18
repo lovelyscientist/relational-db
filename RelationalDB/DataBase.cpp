@@ -69,7 +69,7 @@ void DataBase::create_table(std::string inputData)
     positionOfSpace = inputData.find(' ', 13);
     
     columns = inputData.substr(positionOfBegin + 1, positionOfEnd-positionOfBegin-2);
-    this->tables[this->tables_count] = Table(this->split_to_array(columns, ','), inputData.substr(13, positionOfSpace - 12));
+    this->tables[this->tables_count] = Table(this->split_to_array(columns, ','), inputData.substr(13, positionOfSpace - 13));
     std::cout << "successful creation of " + this->tables[this->tables_count].get_name() << std::endl;
     this->tables_count++;
 }
@@ -110,13 +110,13 @@ void DataBase::insert_into(std::string inputData)
     positionOfSpace = inputData.find(' ', 12);
     
     values = inputData.substr(positionOf1 + 1, positionOf2-positionOf1-2);
-    name = inputData.substr(12, positionOfSpace - 11);
+    name = inputData.substr(12, positionOfSpace - 12);
     
     for (unsigned int i = 0; i<this->tables_count; i++){
         if (this->tables[i].get_name() == name) {
             this->tables[i].insert(this->split_to_array(values, ','));
             std::cout << "successful insert" << std::endl;
-            this->tables[i].select();
+            break;
         }
     }
 }
@@ -125,21 +125,15 @@ void DataBase::select_from(std::string inputData)
     std::string tableName = inputData.substr(14, inputData.length() - 15);
     
     for (unsigned int i = 0; i<this->tables_count; i++){
-         std::cout << tables[i].get_name()<< std::endl;
-         std::cout << tableName << std::endl;
-        
-        this->tables[i].select();
-        
         if (this->tables[i].get_name() == tableName) {
-            std::cout << "*" << std::endl;
             this->tables[i].select();
-            std::cout << "successful select from" + tableName << std::endl;
+            std::cout << "successful select from " + tableName << std::endl;
             break;
         }
     }
 }
 std::string* DataBase::split_to_array(std::string string, char delim) {
-    std::string arr[500];
+    std::string* arr = new std::string [500];
     std::size_t spacePos, currPos = 0, prevPos = 0;;
     unsigned int k = 0;
     
