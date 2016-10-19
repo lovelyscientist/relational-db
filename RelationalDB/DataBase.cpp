@@ -7,14 +7,26 @@
 //
 
 #include "DataBase.hpp"
+#include "DBFileLoader.hpp"
+
 #include <iostream>
 
+DataBase::DataBase(std::string name){
+    this->name = name;
+};
+int DataBase::get_tables_count(){
+    return this->tables_count;
+}
+std::string DataBase::get_name(){
+    return this->name;
+}
 void DataBase::start_operation()
 {
     std::string dataToBeInserted,
                 shortQueryName,
                 longQueryName,
                 middleQueryName,
+                middleMiddleQueryName,
                 longLongQueryName;
     
     bool isValidOperation = false;
@@ -24,6 +36,7 @@ void DataBase::start_operation()
     while (std::getline (std::cin, dataToBeInserted)) {
         shortQueryName = dataToBeInserted.substr(0, 6);
         middleQueryName = dataToBeInserted.substr(0, 10);
+        middleMiddleQueryName = dataToBeInserted.substr(0, 11);
         longQueryName = dataToBeInserted.substr(0, 12);
         longLongQueryName = dataToBeInserted.substr(0, 13);
         
@@ -51,6 +64,13 @@ void DataBase::start_operation()
         if (longLongQueryName == SELECT_QUERY_NAME) {
             isValidOperation = true;
             this->select_from(dataToBeInserted);
+        }
+        
+        if (middleMiddleQueryName == CREATE_DUMP_QUERY_NAME) {
+            isValidOperation = true;
+            DBFileLoader *loader = new DBFileLoader();
+            loader->create_dump(this, "file");
+            std::cout << "successfully created dump for " + this->name << std::endl;
         }
         
         if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
@@ -115,7 +135,7 @@ void DataBase::insert_into(std::string inputData)
     for (unsigned int i = 0; i<this->tables_count; i++){
         if (this->tables[i].get_name() == name) {
             this->tables[i].insert(this->split_to_array(values, ','));
-            std::cout << "successful insert" << std::endl;
+            std::cout << "successful insert into "+ name << std::endl;
             break;
         }
     }
@@ -149,7 +169,7 @@ std::string* DataBase::split_to_array(std::string string, char delim) {
     arr[k] = string.substr(prevPos,string.length());
     arr[k+1] = "";
 
-    return &arr[0];
+    return arr;
 }
 std::string DataBase:: parse_join(std::string inputData, std::string returnParametr){
     std::string table1 = "",

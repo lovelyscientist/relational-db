@@ -10,8 +10,20 @@
 #include "DataBase.hpp"
 
 int main(int argc, const char * argv[]) {
-    DataBase* myNewDb = new DataBase();
-    myNewDb->start_operation();
+    DataBase* BooksDb = new DataBase("Books");
     
+    /*
+    DataBase* SchoolDB = new DataBase("School");
+    SchoolDB->create_table("CREATE TABLE boys (name,surname,age);");
+    SchoolDB->create_table("CREATE TABLE girls (name,surname,favourite_color);");
+    SchoolDB->insert_into("INSERT INTO boys VALUES (vlad,sazonov,19);");
+    SchoolDB->insert_into("INSERT INTO boys VALUES (vlad,alexashin,19);");
+    SchoolDB->insert_into("INSERT INTO girls VALUES (inna,sherbak,19);");
+    SchoolDB->insert_into("INSERT INTO girls VALUES (vlada,tyshchenko,19);");
+    
+    DBFileLoader *loader = new DBFileLoader();
+    loader->create_dump(SchoolDB, "file");*/
+
+    BooksDb->start_operation();
     return 0;
 }

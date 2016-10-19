@@ -72,8 +72,8 @@
 		A98F34AC1D9A6E5000141BFC /* RelationalDB */ = {
 			isa = PBXGroup;
 			children = (
-				A98F34BE1DB6198800141BFC /* DBFileLoader.hpp */,
 				A98F34BD1DB6198800141BFC /* DBFileLoader.cpp */,
+				A98F34BE1DB6198800141BFC /* DBFileLoader.hpp */,
 				689C8ED41DA509F0006E2483 /* String.cpp */,
 				689C8ED51DA509F0006E2483 /* String.hpp */,
 				A98F34BA1DAB8E0200141BFC /* Row.cpp */,
@@ -237,6 +237,7 @@
 		A98F34B21D9A6E5000141BFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -244,6 +245,7 @@
 		A98F34B31D9A6E5000141BFC /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
