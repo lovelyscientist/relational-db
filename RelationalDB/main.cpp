@@ -10,20 +10,25 @@
 #include "DataBase.hpp"
 
 int main(int argc, const char * argv[]) {
-    DataBase* BooksDb = new DataBase("Books");
+    //DataBase* BooksDb = new DataBase("Books");
     
-    /*
+    
     DataBase* SchoolDB = new DataBase("School");
-    SchoolDB->create_table("CREATE TABLE boys (name,surname,age);");
+    SchoolDB->create_table("CREATE TABLE boys (surname,name,age);");
     SchoolDB->create_table("CREATE TABLE girls (name,surname,favourite_color);");
-    SchoolDB->insert_into("INSERT INTO boys VALUES (vlad,sazonov,19);");
-    SchoolDB->insert_into("INSERT INTO boys VALUES (vlad,alexashin,19);");
+    SchoolDB->insert_into("INSERT INTO boys VALUES (sazonov,vladik,19);");
+    SchoolDB->insert_into("INSERT INTO boys VALUES (poltorak,sasha,39);");
     SchoolDB->insert_into("INSERT INTO girls VALUES (inna,sherbak,19);");
     SchoolDB->insert_into("INSERT INTO girls VALUES (vlada,tyshchenko,19);");
+    SchoolDB->insert_into("INSERT INTO girls VALUES (sasha,ivanova,19);");
     
-    DBFileLoader *loader = new DBFileLoader();
-    loader->create_dump(SchoolDB, "file");*/
+    SchoolDB->join("INNER JOIN girls AND boys ON df.dfd =dfdf.dfd");
+    
+    
+    //DBFileLoader *loader = new DBFileLoader();
+    //loader->create_dump(SchoolDB, "file");
+    
 
-    BooksDb->start_operation();
+    //BooksDb->start_operation();
     return 0;
 }

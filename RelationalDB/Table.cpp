@@ -14,12 +14,13 @@ Table::Table(std::string columns_[], std::string name) {
     this->data = new std::string*[100];
     this->columns = new std::string[500];
     this->name = name;
+    unsigned int length = 0;
     
-    for (unsigned int length = 0; columns_[length].length(); length++) {
+    for (length = 0; columns_[length].length(); length++) {
         this->columns[length] = columns_[length];
     }
     
-    this->columns_length = length_- 1;
+    this->columns_length = length;
     this->data_length = 0;
 }
 std::string Table::get_name() {

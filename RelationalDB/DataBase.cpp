@@ -10,6 +10,7 @@
 #include "DBFileLoader.hpp"
 
 #include <iostream>
+#include <map>
 
 DataBase::DataBase(std::string name){
     this->name = name;
@@ -96,24 +97,64 @@ void DataBase::create_table(std::string inputData)
 
 void DataBase::join(std::string inputData)
 {
-    Table tableObj;
-    std::string table1 = this->parse_join(inputData, "table1");
-    std::string table2 = this->parse_join(inputData, "table2");
-    std::string column1 = this->parse_join(inputData, "column1");
-    std::string column2 = this->parse_join(inputData, "column2");
+    std::map<std::string, std::string> shorterTable;
+    
+    Table tableObj1,
+          tableObj2,
+          tableForMap;
+    
+    int indexOfKeyColumn = 0;
+    int indexOfSearchColumn = 0;
+    
+    std::string table1 = this->parse_join(inputData, "table1"),
+                table2 = this->parse_join(inputData, "table2"),
+                column1 = this->parse_join(inputData, "column1"),
+                column2 = this->parse_join(inputData, "column2");
     
     for (unsigned int i = 0; i<this->tables_count; i++){
-        if (this->tables[i].get_name() == table1) {
-            tableObj = this->tables[i];
-            break;
+        if (this->tables[i].get_name() == table1) tableObj1 = this->tables[i];
+        if (this->tables[i].get_name() == table2) tableObj2 = this->tables[i];
+    }
+    
+    if (tableObj1.get_data_length() > tableObj2.get_data_length()) {
+        tableForMap = tableObj2;
+        tableObj2 = tableObj1;
+    } else {
+        tableForMap = tableObj1;
+    }
+    
+    // replace this method to Table class
+    
+    for (int i = 0; i<tableForMap.get_data_length(); i++) {
+        if (tableForMap.get_columns()[i] == column1) indexOfKeyColumn = i;
+    }
+    
+    for (int i = 0; i<tableObj2.get_data_length(); i++) {
+        if (tableObj2.get_columns()[i] == column2) indexOfSearchColumn = i;
+    }
+    
+    // building map started
+    for (int i = 0; i < tableForMap.get_data_length(); ++i) {
+        std::string valueOfMap = "";
+        for (int j = 0; j <tableForMap.get_columns_length(); ++j) {
+            if (j != indexOfKeyColumn) {
+                valueOfMap+=tableForMap.get_data()[i][j] + " ";
+            }
+        }
+        shorterTable[tableForMap.get_data()[i][indexOfKeyColumn]] = valueOfMap;
+    }
+    
+     // building map ended
+    
+    for (int i = 0; i < tableObj2.get_data_length(); i++) {
+        if (shorterTable.count(tableObj2.get_data()[i][indexOfSearchColumn]) > 0) {
+            for (int j = 0; j < tableObj2.get_columns_length(); j++) {
+                std::cout << tableObj2.get_data()[i][j] + " ";
+            }
+            std::cout << shorterTable.at(tableObj2.get_data()[i][indexOfSearchColumn]) << std::endl;
         }
     }
     
-    for (unsigned int i = 0; i<this->tables_count; i++){
-        if (this->tables[i].get_name() == table2) {
-            break;
-        }
-    }
 }
 
 void DataBase::insert_into(std::string inputData)
@@ -135,7 +176,7 @@ void DataBase::insert_into(std::string inputData)
     for (unsigned int i = 0; i<this->tables_count; i++){
         if (this->tables[i].get_name() == name) {
             this->tables[i].insert(this->split_to_array(values, ','));
-            std::cout << "successful insert into "+ name << std::endl;
+            std::cout << "successful insert into " + name << std::endl;
             break;
         }
     }
@@ -185,7 +226,7 @@ std::string DataBase:: parse_join(std::string inputData, std::string returnParam
     positionOfSpace2 = inputData.find(' ', positionOfSpace1 + 4);
     positionOfSpace3 = inputData.find("ON", positionOfSpace2 + 1);
     
-    table1 = inputData.substr(11, positionOfSpace1 - 10);
+    table1 = inputData.substr(11, positionOfSpace1 - 11);
     table2 = inputData.substr(positionOfSpace2 + 1, positionOfSpace3 - positionOfSpace2 - 2);
     
     if (returnParametr == "table1") return table1;
