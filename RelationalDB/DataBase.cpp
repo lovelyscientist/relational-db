@@ -109,28 +109,38 @@ void DataBase::join(std::string inputData)
     std::string table1 = this->parse_join(inputData, "table1"),
                 table2 = this->parse_join(inputData, "table2"),
                 column1 = this->parse_join(inputData, "column1"),
-                column2 = this->parse_join(inputData, "column2");
+                column2 = this->parse_join(inputData, "column2"),
+                tmpColumn;
     
     for (unsigned int i = 0; i<this->tables_count; i++){
         if (this->tables[i].get_name() == table1) tableObj1 = this->tables[i];
         if (this->tables[i].get_name() == table2) tableObj2 = this->tables[i];
     }
     
-    if (tableObj1.get_data_length() > tableObj2.get_data_length()) {
+    if (tableObj1.get_data_length() >= tableObj2.get_data_length()) {
         tableForMap = tableObj2;
         tableObj2 = tableObj1;
+        tmpColumn = column1;
+        column1 = column2;
+        column2 = tmpColumn;
     } else {
         tableForMap = tableObj1;
     }
     
     // replace this method to Table class
     
-    for (int i = 0; i<tableForMap.get_data_length(); i++) {
-        if (tableForMap.get_columns()[i] == column1) indexOfKeyColumn = i;
+    for (int i = 0; i<tableForMap.get_columns_length(); i++) {
+        if (tableForMap.get_columns()[i] == column1) {
+            indexOfKeyColumn = i;
+            break;
+        }
     }
     
-    for (int i = 0; i<tableObj2.get_data_length(); i++) {
-        if (tableObj2.get_columns()[i] == column2) indexOfSearchColumn = i;
+    for (int i = 0; i<tableObj2.get_columns_length(); i++) {
+        if (tableObj2.get_columns()[i] == column2) {
+            indexOfSearchColumn = i;
+            break;
+        }
     }
     
     // building map started
@@ -154,6 +164,7 @@ void DataBase::join(std::string inputData)
             std::cout << shorterTable.at(tableObj2.get_data()[i][indexOfSearchColumn]) << std::endl;
         }
     }
+
     
 }
 
@@ -215,8 +226,8 @@ std::string* DataBase::split_to_array(std::string string, char delim) {
 std::string DataBase:: parse_join(std::string inputData, std::string returnParametr){
     std::string table1 = "",
                 table2 = "",
-                column1 = "name",
-                column2 = "name";
+                column1 = "id_of_agency",
+                column2 = "id";
     
     std::size_t positionOfSpace1,
                 positionOfSpace2,
