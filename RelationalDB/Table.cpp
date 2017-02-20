@@ -32,6 +32,11 @@ std::string* Table::get_columns() {
 std::string** Table::get_data() {
     return this->data;
 }
+void Table::set_data(std::string ** db_data) {
+    for (int i = 0; i < this->data_length; ++i ){
+       this->data[i] = db_data[i];
+    }
+}
 void Table::insert(std::string row[])
 {
     this->data[this->data_length] = row;

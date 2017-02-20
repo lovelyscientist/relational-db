@@ -9,26 +9,30 @@
 #include "DBFileLoader.hpp"
 #include "DataBase.hpp"
 #include <fstream>
+#include <iostream>
+#include <sstream>
 
 void DBFileLoader::create_dump(DataBase* dbToDump, std::string fileName) {
-    std::ofstream outfile;
-    outfile.open("dump.txt");
+    std::ofstream outfile(fileName, std::iostream::out);
     
-    // write inputted data into the file.
-    outfile << dbToDump->get_name() << std::endl;
-    
-    for (unsigned int i = 0; i < dbToDump->get_tables_count(); i++) {
-        outfile << "*" << std::endl;
-        outfile << dbToDump->tables[i].get_name() << std::endl;
-        for (unsigned int j = 0; j< dbToDump->tables[i].get_columns_length(); ++j) {
-            outfile << "*" << std::endl;
-            outfile << dbToDump->tables[i].get_columns()[j] << std::endl;
-        }
-    }
-    
-    outfile.close();
+    outfile << *dbToDump;
 }
 
-DataBase DBFileLoader::restore_db(std::string fileName) {
-    return *new DataBase();
+DataBase* DBFileLoader::restore_db(DataBase* db, std::string fileName) {
+    std::ifstream infile(fileName, std::iostream::in);
+    std::string line, query, name;
+    
+    std::getline(infile, name);
+    std::cout << name << std::endl;
+    db->set_name(name);
+    
+    while (std::getline(infile, query))
+    {
+        std::cout << query << std::endl;
+        db->get_operation_title(query);
+    }
+    
+    return db;
+    //infile >> restoredDb;
+    
 }

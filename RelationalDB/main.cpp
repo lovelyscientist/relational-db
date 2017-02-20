@@ -7,32 +7,40 @@
 //
 
 #include <iostream>
-#include "DataBase.hpp"
+#include "DBFileLoader.hpp"
 
 int main(int argc, const char * argv[]) {
     //DataBase* BooksDb = new DataBase("Books");
     //BooksDb->start_operation();
     
     
-    DataBase* ISSDB = new DataBase("ISS");
-    ISSDB->create_table("CREATE TABLE modules (title_of_module,id_of_agency);");
-    ISSDB->create_table("CREATE TABLE agencies (title_of_agency,id);");
+    DataBase ISSDB("ISS");
     
-    ISSDB->insert_into("INSERT INTO modules VALUES (Zarya,4);");
-    ISSDB->insert_into("INSERT INTO modules VALUES (Unity,1);");
-    ISSDB->insert_into("INSERT INTO modules VALUES (Columbus,2);");
-    ISSDB->insert_into("INSERT INTO modules VALUES (Cupola,3);");
+    DataBase iss_new("new");
     
-    ISSDB->insert_into("INSERT INTO agencies VALUES (NASA,1);");
-    ISSDB->insert_into("INSERT INTO agencies VALUES (ESA,2);");
-    ISSDB->insert_into("INSERT INTO agencies VALUES (JAXA,3);");
-    ISSDB->insert_into("INSERT INTO agencies VALUES (Roskosmos,4);");
-    ISSDB->insert_into("INSERT INTO agencies VALUES (CSA,5);");
-   
-    ISSDB->join("INNER JOIN modules AND agencies ON modules.id_of_agency = agencies.id");
+    ISSDB.get_operation_title("CREATE TABLE modules (title_of_module,id_of_agency);")
+         .get_operation_title("CREATE TABLE agencies (title_of_agency,id);")
+         .get_operation_title("INSERT INTO modules VALUES (Zarya,4);")
+         .get_operation_title("INSERT INTO modules VALUES (Unity,1);")
+         .get_operation_title("INSERT INTO modules VALUES (Columbus,2);")
+         .get_operation_title("INSERT INTO modules VALUES (Cupola,3);")
+         .get_operation_title("INSERT INTO agencies VALUES (NASA,1);")
+         .get_operation_title("INSERT INTO agencies VALUES (ESA,2);")
+         .get_operation_title("INSERT INTO agencies VALUES (JAXA,3);")
+         .get_operation_title("INSERT INTO agencies VALUES (Roskosmos,4);")
+         .get_operation_title("INSERT INTO agencies VALUES (CSA,5);")
+         .get_operation_title("INNER JOIN modules AND agencies ON modules.id_of_agency = agencies.id");
     
+    std::cout << ISSDB;
     
-    //DBFileLoader *loader = new DBFileLoader();
-    //loader->create_dump(SchoolDB, "file");
+    DBFileLoader loader;
+    loader.create_dump(&ISSDB, "dump.txt");
+    
+    loader.restore_db(&iss_new, "backup.txt");
+    
+    std::cout << iss_new;
+    
+    ISSDB.start_operation();
+    
     return 0;
 }

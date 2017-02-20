@@ -23,18 +23,27 @@ class DataBase
 {
 public:
     DataBase (std::string);
+    DataBase(DataBase &);
     void start_operation();
+    void set_name(std::string);
+    DataBase& get_operation_title(std::string);
     void insert_into(std::string);
     void join(std::string);
     void select_from(std::string);
     void create_table(std::string);
     int get_tables_count();
+    Table& operator[] (const int);
+    DataBase& operator== (DataBase&);
     std::string get_name();
     std::string* split_to_array(std::string, char);
     std::string parse_join(std::string, std::string);
     Table tables[MAX_TABLES_COUNT];
+    friend std::ostream& operator <<(std::ostream&, DataBase&);
+    friend std::istream& operator >>(std::istream&, DataBase&);
 private:
     std::string name;
+    std::string sql_statements[1000];
+    int sql_statements_real_length = 0;
     int tables_count = 0;
 };
 

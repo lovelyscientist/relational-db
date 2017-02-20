@@ -15,67 +15,126 @@
 DataBase::DataBase(std::string name){
     this->name = name;
 };
+void DataBase::set_name(std::string name){
+    this->name = name;
+};
+std::ostream& operator<<(std::ostream& os, DataBase& db)
+{
+    os << db.name << std::endl;
+    for (int i = 0; i < db.sql_statements_real_length; i++) {
+        os << db.sql_statements[i] << std::endl;
+    }
+
+  return os;
+}
+std::istream& operator >>(std::istream& is, DataBase& db)
+{
+    std::string line, query, name;
+    
+    std::getline(is, name);
+    db.set_name(name);
+    
+    while (std::getline(is, query))
+    {
+        db.get_operation_title(query);
+    }
+    
+    return is;
+}
+Table& DataBase::operator[] (const int index)
+{
+    return this->tables[index];
+}
+DataBase& DataBase::operator== (DataBase& db) {
+    if (this != &db) {
+        this->name = db.name;
+        
+        for (int i = 0; i < db.tables_count; i++){
+            this->tables[i] = Table(db[i].get_columns(), db[i].get_name());
+            this->tables[i].set_data(db[i].get_data());
+        }
+        
+        this->tables_count = db.get_tables_count();
+    }
+    
+    return *this;
+}
+
+DataBase::DataBase(DataBase & db) {
+    this->name = db.name;
+    
+    for (int i = 0; i < db.tables_count; i++){
+        this->tables[i] = Table(db[i].get_columns(), db[i].get_name());
+        this->tables[i].set_data(db[i].get_data());
+    }
+    
+    this->tables_count = db.get_tables_count();
+}
 int DataBase::get_tables_count(){
     return this->tables_count;
 }
 std::string DataBase::get_name(){
     return this->name;
 }
-void DataBase::start_operation()
-{
-    std::string dataToBeInserted,
-                shortQueryName,
-                longQueryName,
-                middleQueryName,
-                middleMiddleQueryName,
-                longLongQueryName;
+DataBase& DataBase::get_operation_title(std::string dataToBeInserted) {
+    std:: string shortQueryName = dataToBeInserted.substr(0, 6),
+                 middleQueryName = dataToBeInserted.substr(0, 10),
+                 middleMiddleQueryName = dataToBeInserted.substr(0, 11),
+                 longQueryName = dataToBeInserted.substr(0, 12),
+                 longLongQueryName = dataToBeInserted.substr(0, 13);
     
     bool isValidOperation = false;
     
+    this->sql_statements[sql_statements_real_length] = dataToBeInserted;
+    this->sql_statements_real_length++;
+
+    
+    
+    if (shortQueryName == SELECT_QUERY_NAME) {
+        isValidOperation = true;
+        //this->select_from("sasha");
+    }
+    
+    if (shortQueryName == INSERT_QUERY_NAME) {
+        isValidOperation = true;
+        this->insert_into(dataToBeInserted);
+    }
+    
+    if (longQueryName == CREATE_TABLE_QUERY_NAME) {
+        isValidOperation = true;
+        this->create_table(dataToBeInserted);
+    }
+    
+    if (middleQueryName == INNER_JOIN_QUERY_NAME) {
+        isValidOperation = true;
+        this->join(dataToBeInserted);
+    }
+    
+    if (longLongQueryName == SELECT_QUERY_NAME) {
+        isValidOperation = true;
+        this->select_from(dataToBeInserted);
+    }
+    
+    if (middleMiddleQueryName == CREATE_DUMP_QUERY_NAME) {
+        isValidOperation = true;
+        DBFileLoader *loader = new DBFileLoader();
+        loader->create_dump(this, "file");
+        std::cout << "successfully created dump for " + this->name << std::endl;
+    }
+    
+    if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
+    isValidOperation = false;
+    
+    return *this;
+
+}
+void DataBase::start_operation()
+{
+    std:: string dataToBeInserted;
     printf("Please, enter you SQL request:\n");
     
     while (std::getline (std::cin, dataToBeInserted)) {
-        shortQueryName = dataToBeInserted.substr(0, 6);
-        middleQueryName = dataToBeInserted.substr(0, 10);
-        middleMiddleQueryName = dataToBeInserted.substr(0, 11);
-        longQueryName = dataToBeInserted.substr(0, 12);
-        longLongQueryName = dataToBeInserted.substr(0, 13);
-        
-        
-        if (shortQueryName == SELECT_QUERY_NAME) {
-            isValidOperation = true;
-            //this->select_from("sasha");
-        }
-        
-        if (shortQueryName == INSERT_QUERY_NAME) {
-            isValidOperation = true;
-            this->insert_into(dataToBeInserted);
-        }
-        
-        if (longQueryName == CREATE_TABLE_QUERY_NAME) {
-            isValidOperation = true;
-            this->create_table(dataToBeInserted);
-        }
-        
-        if (middleQueryName == INNER_JOIN_QUERY_NAME) {
-            isValidOperation = true;
-            this->join(dataToBeInserted);
-        }
-        
-        if (longLongQueryName == SELECT_QUERY_NAME) {
-            isValidOperation = true;
-            this->select_from(dataToBeInserted);
-        }
-        
-        if (middleMiddleQueryName == CREATE_DUMP_QUERY_NAME) {
-            isValidOperation = true;
-            DBFileLoader *loader = new DBFileLoader();
-            loader->create_dump(this, "file");
-            std::cout << "successfully created dump for " + this->name << std::endl;
-        }
-        
-        if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
-        isValidOperation = false;
+        this->get_operation_title(dataToBeInserted);
     }
     
 }
