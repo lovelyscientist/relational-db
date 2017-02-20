@@ -33,7 +33,8 @@ public:
     void create_table(std::string);
     int get_tables_count();
     Table& operator[] (const int);
-    DataBase& operator== (DataBase&);
+    DataBase& operator= (DataBase&);
+    DataBase(const DataBase&);
     std::string get_name();
     std::string* split_to_array(std::string, char);
     std::string parse_join(std::string, std::string);

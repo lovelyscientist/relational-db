@@ -45,7 +45,11 @@ Table& DataBase::operator[] (const int index)
 {
     return this->tables[index];
 }
-DataBase& DataBase::operator== (DataBase& db) {
+DataBase::DataBase(const DataBase& db)
+{
+    
+}
+DataBase& DataBase::operator= (DataBase& db) {
     if (this != &db) {
         this->name = db.name;
         
@@ -54,21 +58,35 @@ DataBase& DataBase::operator== (DataBase& db) {
             this->tables[i].set_data(db[i].get_data());
         }
         
+        for (int i = 0; i < db.sql_statements_real_length; i++) {
+            this->sql_statements[i] = db.sql_statements[i];
+        }
+        
         this->tables_count = db.get_tables_count();
+        this->sql_statements_real_length = db.sql_statements_real_length;
+    
     }
     
     return *this;
 }
 
 DataBase::DataBase(DataBase & db) {
-    this->name = db.name;
-    
-    for (int i = 0; i < db.tables_count; i++){
-        this->tables[i] = Table(db[i].get_columns(), db[i].get_name());
-        this->tables[i].set_data(db[i].get_data());
+    if (this != &db) {
+        this->name = db.name;
+        
+        for (int i = 0; i < db.tables_count; i++){
+            this->tables[i] = Table(db[i].get_columns(), db[i].get_name());
+            this->tables[i].set_data(db[i].get_data());
+        }
+        
+        for (int i = 0; i < db.sql_statements_real_length; i++) {
+            this->sql_statements[i] = db.sql_statements[i];
+        }
+        
+        this->tables_count = db.get_tables_count();
+        this->sql_statements_real_length = db.sql_statements_real_length;
+        
     }
-    
-    this->tables_count = db.get_tables_count();
 }
 int DataBase::get_tables_count(){
     return this->tables_count;
