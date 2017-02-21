@@ -167,7 +167,7 @@ void DataBase::restore_db(std::string inputData)
     DBFileLoader *loader = new DBFileLoader();
     
     std::size_t beginningOfFileName = 8;
-    std::string fileName = inputData.substr(beginningOfFileName);
+    std::string fileName = inputData.substr(beginningOfFileName, inputData.length() - 9);
     
     loader->restore_db(this, fileName);
     

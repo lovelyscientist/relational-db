@@ -11,8 +11,8 @@
 
 int main(int argc, const char * argv[]) {
     DataBase ISSDB("ISS");
-    DataBase TestDialog("TEST0");
-    DataBase TestRestore("TEST1");
+    DataBase TestDialog("TEST1");
+    DataBase TestRestore;
     DataBase TestAssignment("TEST2");
     
     ISSDB.get_operation_title("CREATE TABLE modules (title_of_module,id_of_agency);")
