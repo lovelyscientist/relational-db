@@ -45,10 +45,6 @@ Table& DataBase::operator[] (const int index)
 {
     return this->tables[index];
 }
-DataBase::DataBase(const DataBase& db)
-{
-    
-}
 DataBase& DataBase::operator= (DataBase& db) {
     if (this != &db) {
         this->name = db.name;
@@ -96,22 +92,14 @@ std::string DataBase::get_name(){
 }
 DataBase& DataBase::get_operation_title(std::string dataToBeInserted) {
     std:: string shortQueryName = dataToBeInserted.substr(0, 6),
+                 shortMiddleQueryName = dataToBeInserted.substr(0, 7),
                  middleQueryName = dataToBeInserted.substr(0, 10),
                  middleMiddleQueryName = dataToBeInserted.substr(0, 11),
                  longQueryName = dataToBeInserted.substr(0, 12),
                  longLongQueryName = dataToBeInserted.substr(0, 13);
     
-    bool isValidOperation = false;
-    
-    this->sql_statements[sql_statements_real_length] = dataToBeInserted;
-    this->sql_statements_real_length++;
-
-    
-    
-    if (shortQueryName == SELECT_QUERY_NAME) {
-        isValidOperation = true;
-        //this->select_from("sasha");
-    }
+    bool isValidOperation = false,
+         saveToSQLCommansCollection = true;
     
     if (shortQueryName == INSERT_QUERY_NAME) {
         isValidOperation = true;
@@ -130,18 +118,30 @@ DataBase& DataBase::get_operation_title(std::string dataToBeInserted) {
     
     if (longLongQueryName == SELECT_QUERY_NAME) {
         isValidOperation = true;
+        saveToSQLCommansCollection = false;
         this->select_from(dataToBeInserted);
     }
     
     if (middleMiddleQueryName == CREATE_DUMP_QUERY_NAME) {
         isValidOperation = true;
-        DBFileLoader *loader = new DBFileLoader();
-        loader->create_dump(this, "file");
-        std::cout << "successfully created dump for " + this->name << std::endl;
+        saveToSQLCommansCollection = false;
+        this->create_dump(dataToBeInserted);
     }
     
+    if (shortMiddleQueryName == RESTORE_QUERY_NAME) {
+        isValidOperation = true;
+        saveToSQLCommansCollection = false;
+        this->restore_db(dataToBeInserted);
+    }
+
+    
+    if (isValidOperation && saveToSQLCommansCollection) {
+        this->sql_statements[sql_statements_real_length] = dataToBeInserted;
+        this->sql_statements_real_length++;
+    }
+    
+    
     if (!isValidOperation) std::cout << "Oops! This operation can not be performed" << std::endl;
-    isValidOperation = false;
     
     return *this;
 
@@ -152,11 +152,35 @@ void DataBase::start_operation()
     printf("Please, enter you SQL request:\n");
     
     while (std::getline (std::cin, dataToBeInserted)) {
+        if (dataToBeInserted == QUIT_QUERY_NAME) {
+            break;
+        }
         this->get_operation_title(dataToBeInserted);
     }
     
 }
-
+void DataBase::restore_db(std::string inputData)
+{
+    DBFileLoader *loader = new DBFileLoader();
+    
+    std::size_t beginningOfFileName = 8;
+    std::string fileName = inputData.substr(beginningOfFileName);
+    
+    loader->restore_db(this, fileName);
+    
+    std::cout << "successfully created dump for " + this->name << std::endl;
+}
+void DataBase::create_dump(std::string inputData)
+{
+    DBFileLoader *loader = new DBFileLoader();
+    
+    std::size_t beginningOfFileName = 12;
+    std::string fileName = inputData.substr(beginningOfFileName, inputData.length() - 13);
+    
+    loader->create_dump(this, fileName);
+    
+    std::cout << "successfully created dump for " + this->name << std::endl;
+}
 void DataBase::create_table(std::string inputData)
 {
     std::string columns = "";

@@ -10,13 +10,10 @@
 #include "DBFileLoader.hpp"
 
 int main(int argc, const char * argv[]) {
-    //DataBase* BooksDb = new DataBase("Books");
-    //BooksDb->start_operation();
-    
-    
     DataBase ISSDB("ISS");
-    
-    DataBase iss_new("new");
+    DataBase TestDialog("TEST0");
+    DataBase TestRestore("TEST1");
+    DataBase TestAssignment("TEST2");
     
     ISSDB.get_operation_title("CREATE TABLE modules (title_of_module,id_of_agency);")
          .get_operation_title("CREATE TABLE agencies (title_of_agency,id);")
@@ -35,12 +32,15 @@ int main(int argc, const char * argv[]) {
     
     DBFileLoader loader;
     loader.create_dump(&ISSDB, "dump.txt");
+    loader.restore_db(&TestRestore, "backup.txt");
     
-    loader.restore_db(&iss_new, "backup.txt");
+    TestAssignment = ISSDB;
+    std::cout << TestAssignment;
     
-    std::cout << iss_new;
+    DataBase TestCopyConstructor(ISSDB);
+    std::cout << TestCopyConstructor;
     
-    ISSDB.start_operation();
+    TestDialog.start_operation();
     
     return 0;
 }

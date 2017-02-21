@@ -14,7 +14,9 @@
 #define CREATE_TABLE_QUERY_NAME "CREATE TABLE"
 #define INNER_JOIN_QUERY_NAME "INNER JOIN"
 #define SELECT_QUERY_NAME "SELECT * FROM"
+#define QUIT_QUERY_NAME "QUIT;"
 #define CREATE_DUMP_QUERY_NAME "CREATE DUMP"
+#define RESTORE_QUERY_NAME "RESTORE"
 
 #include <stdio.h>
 #include "Table.hpp"
@@ -31,6 +33,8 @@ public:
     void join(std::string);
     void select_from(std::string);
     void create_table(std::string);
+    void create_dump(std::string);
+    void restore_db(std::string);
     int get_tables_count();
     Table& operator[] (const int);
     DataBase& operator= (DataBase&);
