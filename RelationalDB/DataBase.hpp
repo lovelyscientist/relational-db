@@ -24,6 +24,7 @@
 class DataBase
 {
 public:
+    DataBase ();
     DataBase (std::string);
     DataBase(DataBase &);
     void start_operation();

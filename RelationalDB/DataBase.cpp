@@ -15,6 +15,9 @@
 DataBase::DataBase(std::string name){
     this->name = name;
 };
+DataBase::DataBase(){
+    this->name = "";
+};
 void DataBase::set_name(std::string name){
     this->name = name;
 };
