@@ -35,9 +35,10 @@ public:
     void select_from(std::string);
     void create_table(std::string);
     void create_dump(std::string);
-    void restore_db(std::string);
+    virtual void restore_db(std::string);
     int get_tables_count();
     Table& operator[] (const int);
+    Table& db_access(int, int);
     DataBase& operator= (DataBase&);
     DataBase(const DataBase&);
     std::string get_name();

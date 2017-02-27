@@ -48,6 +48,10 @@ Table& DataBase::operator[] (const int index)
 {
     return this->tables[index];
 }
+Table& DataBase::db_access(int start, int end)
+{
+    return this->tables[start];
+}
 DataBase& DataBase::operator= (DataBase& db) {
     if (this != &db) {
         this->name = db.name;
