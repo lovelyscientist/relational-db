@@ -12,9 +12,8 @@
 void DBSmartPointer::create_dump(DataBase* db, std::string fileName) {
     std::ofstream outfile(fileName, std::iostream::out);
     
-    outfile << "title: " << db_pointer->get_name();
-    outfile << "tables_count: " << db->get_tables_count();
-    outfile << "tables: ";
+    outfile << "tables_count: " << db->get_tables_count() << std::endl;
+    outfile << "tables: " << std::endl;
     
     for (int i = 0; i<db->get_tables_count(); i++) {
         outfile << db->tables[i].get_name() << std::endl;
@@ -22,7 +21,7 @@ void DBSmartPointer::create_dump(DataBase* db, std::string fileName) {
 }
 DBSmartPointer::~DBSmartPointer() {
     if (this->db_pointer) {
-        delete[] this->db_pointer;
+        delete this->db_pointer;
     }
 }
 

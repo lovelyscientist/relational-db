@@ -21,6 +21,16 @@
 #include <stdio.h>
 #include "Table.hpp"
 
+class DataBase;
+
+struct LeftSideDB
+{
+    DataBase * database;
+    int begin;
+    int end;
+    DataBase & operator=(const Table &);
+};
+
 class DataBase
 {
 public:
@@ -29,7 +39,6 @@ public:
     DataBase(DataBase &);
     void start_operation();
     void set_name(std::string);
-    DataBase& get_operation_title(std::string);
     void insert_into(std::string);
     void join(std::string);
     void select_from(std::string);
@@ -37,16 +46,19 @@ public:
     void create_dump(std::string);
     virtual void restore_db(std::string);
     int get_tables_count();
+    DataBase& get_operation_title(std::string);
     Table& operator[] (const int);
-    Table& db_access(int, int);
+    LeftSideDB operator()(int i, int j);
     DataBase& operator= (DataBase&);
     DataBase(const DataBase&);
     std::string get_name();
     std::string* split_to_array(std::string, char);
     std::string parse_join(std::string, std::string);
     Table tables[MAX_TABLES_COUNT];
+    
     friend std::ostream& operator <<(std::ostream&, DataBase&);
     friend std::istream& operator >>(std::istream&, DataBase&);
+    friend DataBase & LeftSideDB::operator=(const Table&);
 private:
     std::string name;
     std::string sql_statements[1000];

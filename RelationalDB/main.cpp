@@ -7,13 +7,16 @@
 //
 
 #include <iostream>
-#include "DBFileLoader.hpp"
+#include "DataBaseWrapper.hpp"
+
 
 int main(int argc, const char * argv[]) {
     DataBase ISSDB("ISS");
     DataBase TestDialog("TEST1");
     DataBase TestRestore;
     DataBase TestAssignment("TEST2");
+    DBSmartPointer smart_p;
+    DataBase TestPseudoVariable("test");
     
     ISSDB.get_operation_title("CREATE TABLE modules (title_of_module,id_of_agency);")
          .get_operation_title("CREATE TABLE agencies (title_of_agency,id);")
@@ -39,6 +42,26 @@ int main(int argc, const char * argv[]) {
     
     DataBase TestCopyConstructor(ISSDB);
     std::cout << TestCopyConstructor;
+    
+    // testing pseudo variable
+    
+    std::string arr[3];
+    
+    for (int i = 0; i < 3; i++) {
+        arr[i] = "a" + std::to_string(i);
+    }
+    
+   
+    TestPseudoVariable
+        .get_operation_title("CREATE TABLE modules (title_of_module,id_of_agency);")
+        .get_operation_title("CREATE TABLE friends (title_of_module,id_of_agency);")
+        .get_operation_title("CREATE TABLE lollypops (title_of_module,id_of_agency);")
+        .get_operation_title("CREATE TABLE fruits (title_of_module,id_of_agency);");
+    
+    
+    TestPseudoVariable(1,2) = Table(arr, "letters");
+    
+    smart_p.create_dump(&TestPseudoVariable, "myfile.txt");
     
     TestDialog.start_operation();
     

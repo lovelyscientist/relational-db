@@ -19,6 +19,5 @@ class DBFileLoader
 public:
     explicit DBFileLoader(){};
     void create_dump(DataBase*, std::string);
-    // void readTableFromFile()
     DataBase* restore_db(DataBase*, std::string);
 };

@@ -21,6 +21,40 @@ DataBase::DataBase(){
 void DataBase::set_name(std::string name){
     this->name = name;
 };
+DataBase & LeftSideDB::operator=(const Table & newTable)
+{
+    Table tStore [MAX_TABLES_COUNT];
+    int k = 0;
+    
+    for (int i = end; i < database->get_tables_count(); i++) {
+        tStore[k] = database->tables[i];
+        k++;
+    }
+    
+    database->tables[begin] = newTable;
+    
+    for (int i = begin + 1; i <= k; i++){
+        database->tables[i] = tStore[i - begin];
+    }
+    
+    database->tables_count-=(end - begin);
+    
+    return  *database;
+}
+LeftSideDB DataBase::operator () (int i, int j) {
+    LeftSideDB db;
+    db.begin = i;
+    db.end = j;
+    db.database = this;
+    
+    //std::cout << this->tables_count;
+    
+    if (i < 0 || j >= this->tables_count) {
+        throw std::out_of_range("Invalid index.");
+    }
+    
+    return db;
+}
 std::ostream& operator<<(std::ostream& os, DataBase& db)
 {
     os << db.name << std::endl;
@@ -47,10 +81,6 @@ std::istream& operator >>(std::istream& is, DataBase& db)
 Table& DataBase::operator[] (const int index)
 {
     return this->tables[index];
-}
-Table& DataBase::db_access(int start, int end)
-{
-    return this->tables[start];
 }
 DataBase& DataBase::operator= (DataBase& db) {
     if (this != &db) {

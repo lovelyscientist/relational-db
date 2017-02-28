@@ -16,7 +16,7 @@ Table::Table(std::string columns_[], std::string name) {
     this->name = name;
     unsigned int length = 0;
     
-    for (length = 0; columns_[length].length(); length++) {
+    for (length = 0; length < columns_[length].length(); length++) {
         this->columns[length] = columns_[length];
     }
     

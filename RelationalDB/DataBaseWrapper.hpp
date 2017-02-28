@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "DBFileLoader.hpp"
 
-class DBSmartPointer : DBFileLoader {
+class DBSmartPointer : public DBFileLoader {
 public:
     ~DBSmartPointer();
     DataBase& operator *  ();
